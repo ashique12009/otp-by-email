@@ -6,7 +6,6 @@ body{
 }
 #email-input-text-container{
     background-color: #d5f2dd;
-    height: 100vh;
 }
 .flex-container{
     display: flex;
@@ -23,4 +22,21 @@ body{
 }
 .form{
     text-align: center;
+}
+
+.main-container{
+    background-color: #d5f2dd;
+    height: 100vh;
+}
+.msg-wrapper{
+    background-color: aquamarine;
+    padding: 40px;
+    font-size: 20px;
+    border-radius: 5px;
+    color: green;
+    border: 5px solid green;
+}
+
+.h-100vh{
+    height: 100vh;
 }
