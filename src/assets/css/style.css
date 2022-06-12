@@ -1,0 +1,26 @@
+html,
+body{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+#email-input-text-container{
+    background-color: #d5f2dd;
+    height: 100vh;
+}
+.flex-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.form-wrapper{
+    background-color: aquamarine;
+    padding: 40px;
+    font-size: 20px;
+    border-radius: 5px;
+    color: green;
+    border: 5px solid green;
+}
+.form{
+    text-align: center;
+}
