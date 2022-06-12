@@ -14,7 +14,6 @@
                 <?php 
                     require_once '../vendor/autoload.php';
 
-                    use OTPAPP\Otp_Provider;
                     use OTPAPP\Database;
 
                     $otp = $_POST['otp'];
@@ -28,7 +27,7 @@
                         $otp_checker_result = $db->is_otp_expired($otp);
 
                         if ($otp_checker_result) {
-                            echo "You are not a valid user of this system";
+                            echo "Your OTP has been expired!";
                         }
                         else {
                             $msg = 'otp verification done';
@@ -36,7 +35,7 @@
                         }
                     }
                 ?>
-                <a href="index.php">Go back</a>
+                <a href="otp_verifier.php">Go back</a>
             </div>
         </div>
     </div>

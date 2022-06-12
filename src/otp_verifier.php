@@ -11,7 +11,7 @@
     <div id="email-input-text-container" class="flex-container h-100vh">
         <div class="form-wrapper">
             
-            <?php $msg = $_REQUEST['msg'];?>
+            <?php $msg = isset($_REQUEST['msg']) ? $_REQUEST['msg'] : '';?>
             
             <?php if ($msg != '') : ?>
             <div><label><?php echo $msg;?></label></div>
