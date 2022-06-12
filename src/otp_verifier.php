@@ -18,7 +18,7 @@
             <?php endif; ?>
 
             <label>Enter your OTP to login:</label>
-            <form action="process.php" class="form" method="post">
+            <form action="process_otp.php" class="form" method="post">
                 <input type="number" name="otp" id="otp" placeholder="OTP" required>
                 <input type="submit" value="Login">
             </form>

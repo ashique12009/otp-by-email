@@ -73,7 +73,7 @@ class Database
     /**
      * Check OTP exist or not
      */
-    public function check_otp_expired_or_not($otp)
+    public function is_otp_expired($otp)
     {
         try {
             $sql = "SELECT otp FROM otp WHERE otp=$otp AND is_expired=1";
@@ -97,9 +97,15 @@ class Database
      */
     public function insert_otp($otp)
     {
-        $sql = "INSERT INTO otp (otp)
+        try {
+            $sql = "INSERT INTO otp (otp)
                 VALUES (?)";
 
-        return $this->_pdo_connection_object->prepare($sql)->execute([$otp]);
+            return $this->_pdo_connection_object->prepare($sql)->execute([$otp]);
+        } 
+        catch(Exception $e) {
+            echo 'Exception -> ';
+            var_dump($e->getMessage());
+        }
     }
 }
