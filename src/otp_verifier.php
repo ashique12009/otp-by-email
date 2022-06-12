@@ -5,15 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/css/style.css">
-    <title>Email OTP</title>
+    <title>OTP Verifier</title>
 </head>
 <body>
     <div id="email-input-text-container" class="flex-container h-100vh">
         <div class="form-wrapper">
-            <label>Get OTP in E-mail</label>
+            
+            <?php $msg = $_REQUEST['msg'];?>
+            
+            <?php if ($msg != '') : ?>
+            <div><label><?php echo $msg;?></label></div>
+            <?php endif; ?>
+
+            <label>Enter your OTP to login:</label>
             <form action="process.php" class="form" method="post">
-                <input type="email" name="email" id="email" placeholder="E-mail Address" required>
-                <input type="submit" value="Send OTP">
+                <input type="number" name="otp" id="otp" placeholder="OTP" required>
+                <input type="submit" value="Login">
             </form>
         </div>
     </div>

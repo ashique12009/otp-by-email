@@ -1,6 +1,8 @@
 <?php 
 namespace OTPAPP;
 
+use OTPAPP\Database;
+
 /**
  * OTP provider class
  */
@@ -11,6 +13,12 @@ class Otp_Provider
      */
     public function get_otp()
     {
-        return rand(1, 100000);
+        $otp = rand(1, 1000000);
+
+        $db = new Database();
+
+        $db->insert_otp($otp);
+        
+        return $otp;
     }
 }

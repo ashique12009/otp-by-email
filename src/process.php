@@ -12,9 +12,12 @@
         <div class="flex-container h-100vh">
             <div class="msg-wrapper">
                 <?php 
+                    require_once '../vendor/autoload.php';
+
                     // Start with PHPMailer class
                     use PHPMailer\PHPMailer\PHPMailer;
-                    require_once '../vendor/autoload.php';
+                    use OTPAPP\Otp_Provider;
+                    use OTPAPP\Database;
 
                     $email = $_POST['email'];
 
@@ -22,32 +25,50 @@
                         echo 'Email is not valid';
                     }
                     else {
-                        // create a new object
-                        $mail = new PHPMailer();
-                        // configure an SMTP
-                        $mail->isSMTP();
-                        $mail->Host = 'smtp.mailtrap.io';
-                        $mail->SMTPAuth = true;
-                        $mail->Username = '8c47d5a7abace5';
-                        $mail->Password = '7b69ef42c5e37e';
-                        $mail->SMTPSecure = 'tls';
-                        $mail->Port = 2525;
+                        // Check this email is in our system or not
+                        $db = new Database();
+                        $email_checker_result = $db->check_email_exists_or_not($email);
 
-                        $mail->setFrom('confirmation@hotel.com', 'Your Hotel');
-                        $mail->addAddress($email);
-                        $mail->Subject = 'Take your OTP!';
-                        // Set HTML
-                        $mail->isHTML(TRUE);
-                        $mail->Body = "<html>Hi there, here is your OTP: $otp.</html>";
-                        $mail->AltBody = 'Hi there, we are happy to confirm your booking. Please check the document in the attachment.';
-                        // add attachment
-                        // $mail->addAttachment('//confirmations/yourbooking.pdf', 'yourbooking.pdf');
-                        // send the message
-                        if (!$mail->send()) {
-                            echo 'Message could not be sent.';
-                            echo 'Mailer Error: ' . $mail->ErrorInfo;
-                        } else {
-                            echo 'Message has been sent';
+                        if ($email_checker_result) {
+
+                            $otp_provider_object = new Otp_Provider();
+                            // Get OTP
+                            $otp = $otp_provider_object->get_otp();
+                            // echo '<pre>'; 
+                            // var_dump($otp);
+                            // echo '</pre>';exit;
+
+                            // create a new object
+                            $mail = new PHPMailer();
+                            // configure an SMTP
+                            $mail->isSMTP();
+                            $mail->Host = 'smtp.mailtrap.io';
+                            $mail->SMTPAuth = true;
+                            $mail->Username = '8c47d5a7abace5';
+                            $mail->Password = '7b69ef42c5e37e';
+                            $mail->SMTPSecure = 'tls';
+                            $mail->Port = 2525;
+
+                            $mail->setFrom('ashique12009@gmail.com', 'Kh Ashique Mahamud');
+                            $mail->addAddress($email);
+                            $mail->Subject = 'Take your OTP!';
+                            // Set HTML
+                            $mail->isHTML(TRUE);
+                            $mail->Body = "<html>Hi there, here is your OTP: $otp.</html>";
+                            $mail->AltBody = "Hi there, here is your OTP: $otp.";
+                            // add attachment
+                            // $mail->addAttachment('//confirmations/yourbooking.pdf', 'yourbooking.pdf');
+                            // send the message
+                            if (!$mail->send()) {
+                                echo 'Message could not be sent.';
+                                echo 'Mailer Error: ' . $mail->ErrorInfo;
+                            } else {
+                                $msg = 'OTP has been sent to your email';
+                                header("Location: otp_verifier.php?msg=".$msg);
+                            }
+                        }
+                        else {
+                            echo "You are not a valid user of this system";
                         }
                     }
                 ?>
