@@ -27,10 +27,10 @@
                         $otp_checker_result = $db->is_otp_expired($otp);
 
                         if ($otp_checker_result) {
-                            echo "Your OTP has been expired!";
+                            echo "Your OTP is expired or OTP is unavailable in database!";
                         }
                         else {
-                            $msg = 'otp verification done';
+                            $msg = 'OTP verification done';
                             header("Location: profile.php?msg=".$msg);
                         }
                     }

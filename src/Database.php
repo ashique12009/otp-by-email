@@ -2,6 +2,7 @@
 namespace OTPAPP;
 
 use PDO;
+use OTPAPP\ENUM\Config;
 
 /**
  * Database class
@@ -76,15 +77,47 @@ class Database
     public function is_otp_expired($otp)
     {
         try {
-            $sql = "SELECT otp FROM otp WHERE otp=$otp AND is_expired=1";
+            $expire_in_minute = Config::$EXPIRE_TIME_IN_MINUTE;
+
+            $created_at = $this->get_this_otp_created_time($otp);
+
+            $is_otp_expired = false;
+
+            if ($created_at === false) // Your OTP is not available is Database
+                return true;
+
+            $current_datetime_with_expire_minutes = date('Y-m-d H:i:s', strtotime("+" . $expire_in_minute . "minutes"));
+
+            if ($current_datetime_with_expire_minutes > $created_at) {
+                // Your OTP is expired so update the database and return false from here
+                $sql = "UPDATE otp SET is_expired=? WHERE otp=?";
+                $this->_pdo_connection_object->prepare($sql)->execute([1, $otp]);
+                $is_otp_expired = true;
+            }
+            
+            return $is_otp_expired;
+        } 
+        catch(Exception $e) {
+            echo 'Exception -> ';
+            var_dump($e->getMessage());
+        }
+    }
+
+    /**
+     * Get opt created time
+     */
+    public function get_this_otp_created_time($otp)
+    {
+        try {
+            $sql = "SELECT created_at FROM otp WHERE otp=$otp";
             $statement = $this->_pdo_connection_object->query($sql);
             
-            $otp_found = false;
+            $created_at = false;
             
             if ($statement->rowCount() > 0)
-                $otp_found = true;
+                $created_at = $statement->fetch()['created_at'];
             
-            return $otp_found;
+            return $created_at;
         } 
         catch(Exception $e) {
             echo 'Exception -> ';
